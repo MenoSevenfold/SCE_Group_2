@@ -60,6 +60,18 @@ app.get("/get_my_apartments", (req, res) => {
       res.status("404").send(err.message);
     });
 });
+app.get("/get_orders", (req, res) => {
+  const userCredentials = req.query;
+  const owner = userCredentials.userID;
+  return orderModel
+    .find({ apartmentOwner: owner })
+    .then(async (orders) => {
+      res.send(orders);
+    })
+    .catch((err) => {
+      res.status("404").send(err.message);
+    });
+});
 
 app.get("/get_orders", (req, res) => {
   const userCredentials = req.query;
