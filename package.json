@@ -1,5 +1,5 @@
 {
-    "name": "sce_group_2",
+    "name": "sce-group-2-front",
     "version": "0.1.0",
     "private": true,
     "dependencies": {
@@ -10,9 +10,9 @@
         "react": "^16.13.1",
         "react-datepicker": "^2.15.0",
         "react-dom": "^16.13.1",
-        "react-images-upload": "^1.2.8",
         "react-router-dom": "^5.2.0",
-        "react-scripts": "3.4.1"
+        "react-scripts": "3.4.1",
+        "semantic-ui-react": "^0.88.2"
     },
     "scripts": {
         "start": "react-scripts start",
