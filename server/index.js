@@ -73,6 +73,7 @@ app.get("/get_orders", (req, res) => {
     });
 });
 
+<<<<<<< HEAD
 app.get("/get_orders", (req, res) => {
   const userCredentials = req.query;
   const owner = userCredentials.userID;
@@ -86,6 +87,8 @@ app.get("/get_orders", (req, res) => {
     });
 });
 
+=======
+>>>>>>> 19801b2... Server issue
 app.get("/get_apartment", async (req, res) => {
   const apartmentData = req.query;
   const _id = apartmentData.apartmentID;
