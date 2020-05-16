@@ -20,17 +20,17 @@ const OrderCard = ({ order, button }) => {
         </div>
         <div className="header">
           <label>From: </label>
-          {fromDate.getDay() +
+          {fromDate.getDate() +
             "/" +
-            fromDate.getMonth() +
+            (fromDate.getMonth() + 1) +
             "/" +
             fromDate.getFullYear()}
         </div>
         <div className="header">
           <label>To: </label>
-          {toDate.getDay() +
+          {toDate.getDate() +
             "/" +
-            toDate.getMonth() +
+            (fromDate.getMonth() + 1) +
             "/" +
             toDate.getFullYear()}
         </div>

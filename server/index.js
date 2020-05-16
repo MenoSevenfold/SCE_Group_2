@@ -95,6 +95,7 @@ app.post("/login_request", async (req, res) => {
     .then(async (user) => {
       if (user && userCredentials.password === user.password) {
         res.send(user);
+        return;
       }
       const error = new Error("User or Password are incorrect");
       error.name = "UserLoginError";
@@ -113,6 +114,7 @@ app.post("/apartment_update", async (req, res) => {
         apartment.save();
       } catch (err) {
         res.status("503").send(err.message);
+        return;
       }
       res.send("Apartment updated");
     })
