@@ -58,6 +58,15 @@ const ApartmentCard = ({ apartment, button, currentUser }) => {
           {apartment.info}
         </div>
         <div className="header">
+          <label>Picture: </label>
+          <img
+            height="200px"
+            width="200px"
+            src={apartment.picture}
+            alt="Place"
+          />
+        </div>
+        <div className="header">
           <label>Available: </label>
           {apartment.ordered ? (
             <span className="ui" style={{ color: "red" }}>

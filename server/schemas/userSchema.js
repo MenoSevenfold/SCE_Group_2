@@ -13,6 +13,10 @@ let userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  studentCard: {
+    type: String,
+    required: true,
+  },
 });
 
 module.exports = userSchema;

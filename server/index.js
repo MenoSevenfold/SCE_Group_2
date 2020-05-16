@@ -110,13 +110,9 @@ app.post("/apartment_update", async (req, res) => {
     .findOne({ _id: apartmentData.apartmentID })
     .then(async (apartment) => {
       Object.assign(apartment, apartmentData);
-      try {
-        apartment.save();
-      } catch (err) {
-        res.status("503").send(err.message);
-        return;
-      }
-      res.send("Apartment updated");
+      return apartment.save().then(() => {
+        res.send("Apartment updated");
+      });
     })
     .catch((err) => {
       res.status("503").send(err.message);
@@ -126,14 +122,26 @@ app.post("/apartment_update", async (req, res) => {
 app.post("/add_apartment", (req, res) => {
   const apartmentData = req.body;
   var apartmentInstance = new apartmentModel(apartmentData);
-  apartmentInstance.save();
-  res.send("Apartment Added");
+  return apartmentInstance
+    .save()
+    .then(() => {
+      res.send("Apartment Added");
+    })
+    .catch((err) => {
+      res.status("404").send(err.message);
+    });
 });
 app.post("/order_apartment", (req, res) => {
   const data = req.body;
   var orderInstance = new orderModel(data);
-  orderInstance.save();
-  res.send("Order added successfuly");
+  return orderInstance
+    .save()
+    .then(() => {
+      res.send("Order added successfuly");
+    })
+    .catch((err) => {
+      res.status("404").send(err.message);
+    });
 });
 app.post("/delete_apartment", async (req, res) => {
   const apartmentData = req.body;
@@ -151,12 +159,13 @@ app.post("/delete_apartment", async (req, res) => {
 app.post("/register_request", (req, res) => {
   const userCredentials = req.body;
   var user_instance = new usersModel(userCredentials);
-  return usersModel
+  usersModel
     .findOne({ username: userCredentials.username })
     .then((result) => {
       if (!result) {
-        user_instance.save();
-        res.send("User entered successfully!");
+        return user_instance.save().then(() => {
+          res.send("User entered successfully!");
+        });
       }
       const error = new Error("User already exist");
       error.name = "UserAlreadyExistError";

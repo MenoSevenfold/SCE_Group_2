@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import ImageUploader from "react-images-upload";
+import axios from "axios";
 
 const ApartmentForm = ({ submitForm, apartmentData }) => {
   const [apartmentOwnerName, setApartmentOwnerName] = useState();
@@ -8,6 +10,7 @@ const ApartmentForm = ({ submitForm, apartmentData }) => {
   const [apartmentRooms, setApartmentRooms] = useState();
   const [dateLimit, setDateLimit] = useState();
   const [apartmentDescription, setApartmentDescription] = useState();
+  const [imgFile, setImgFile] = useState(null);
 
   const [submitButtonName, setSubmitButtonName] = useState("Add");
 
@@ -20,14 +23,30 @@ const ApartmentForm = ({ submitForm, apartmentData }) => {
       setApartmentRooms(apartmentData.rooms);
       setApartmentDescription(apartmentData.info);
       setDateLimit(apartmentData.dateLimit);
+      axios({
+        url: apartmentData.picture,
+        method: "GET",
+        responseType: "blob",
+      }).then((res) => setImgFile(res.data));
       setSubmitButtonName("Save");
     }
   }, [apartmentData]);
 
+  const onDrop = (picture) => {
+    setImgFile(picture[0]);
+  };
+  const getURL = (imgFile) => {
+    var urlCreator = window.URL || window.webkitURL;
+    var imageUrl = urlCreator.createObjectURL(imgFile);
+    return imageUrl;
+  };
   const createForm = () => {
     return (
       <div>
-        <form className="ui form" onSubmit={submitForm}>
+        <form
+          className="ui form"
+          onSubmit={(event) => submitForm(event, imgFile)}
+        >
           <div className="field">
             <label>Name</label>
             <input
@@ -98,6 +117,26 @@ const ApartmentForm = ({ submitForm, apartmentData }) => {
               value={apartmentDescription}
               onChange={(event) => setApartmentDescription(event.target.value)}
             ></textarea>
+          </div>
+          <div className="field">
+            {imgFile !== null ? (
+              <img
+                alt="Media Content"
+                height="200px"
+                width="200px"
+                src={typeof imgFile === "string" ? imgFile : getURL(imgFile)}
+              ></img>
+            ) : null}
+
+            <ImageUploader
+              name="image"
+              withIcon={false}
+              buttonText="Choose images"
+              onChange={onDrop}
+              singleImage={true}
+              imgExtension={[".jpg"]}
+              maxFileSize={5242880}
+            />
           </div>
           <button className="ui button" type="submit">
             {submitButtonName}
