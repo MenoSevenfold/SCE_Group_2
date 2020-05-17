@@ -1,8 +1,16 @@
 import React from "react";
+import { differenceInCalendarDays } from "date-fns";
 
 const OrderCard = ({ order, button }) => {
   const fromDate = new Date(order.fromDate);
   const toDate = new Date(order.toDate);
+
+  const calcPrice = () => {
+    const priceForDay = order.price / 30;
+    const days = differenceInCalendarDays(new Date(toDate), new Date(fromDate));
+    return priceForDay * days;
+  };
+
   return (
     <div className="ui card">
       <div className="content">
@@ -33,6 +41,10 @@ const OrderCard = ({ order, button }) => {
             (fromDate.getMonth() + 1) +
             "/" +
             toDate.getFullYear()}
+        </div>
+        <div className="header">
+          <label>Actual Paying: </label>
+          {calcPrice().toFixed(2)}
         </div>
         {button}
       </div>

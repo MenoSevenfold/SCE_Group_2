@@ -30,7 +30,7 @@ const Login = () => {
   };
   return (
     <div className="ui container segment">
-      <h1 className="ui header">Semi Rom</h1>
+      <h1 className="ui header">Sami Room</h1>
       <form className="ui form" onSubmit={submitForm}>
         <div className="field">
           <label>Username</label>
