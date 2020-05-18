@@ -16,15 +16,15 @@ const Apartments = ({ userID, type }) => {
   }, []);
 
   const orderApartments = (sortyBy) => {
+    let newList;
     if (sortyBy === "place") {
-      setApartmentList(
-        apartmentList.sort((a, b) => (a.place > b.place ? 1 : -1))
-      );
-    } else {
-      setApartmentList(
-        apartmentList.sort((a, b) => (a.price > b.price ? 1 : -1))
-      );
+      newList = [...apartmentList.sort((a, b) => (a.place > b.place ? 1 : -1))];
+    } else if (sortyBy === "price") {
+      newList = [...apartmentList.sort((a, b) => (a.price > b.price ? 1 : -1))];
+    } else if (sortyBy === "rooms") {
+      newList = [...apartmentList.sort((a, b) => (a.rooms > b.rooms ? 1 : -1))];
     }
+    setApartmentList(newList);
   };
 
   const createApartmentCard = (apartment, ind) => {
@@ -56,7 +56,6 @@ const Apartments = ({ userID, type }) => {
   return (
     <div>
       <NavBar OrderBy={(sorter) => orderApartments(sorter)} />
-
       <div className="ui cards">
         {apartmentList.length === 0
           ? emptyApartment()
