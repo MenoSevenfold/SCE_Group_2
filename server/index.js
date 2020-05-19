@@ -6,6 +6,7 @@ const express = require("express");
 const userSchema = require("./schemas/userSchema");
 const apartmentSchema = require("./schemas/apartmentSchema");
 const orderSchema = require("./schemas/orderSchema");
+const attractionSchema = require("./schemas/attractionSchema");
 
 const bodyParser = require("body-parser");
 
@@ -21,6 +22,7 @@ const app = express();
 const usersModel = mongoose.model("users", userSchema);
 const apartmentModel = mongoose.model("apartments", apartmentSchema);
 const orderModel = mongoose.model("orders", orderSchema);
+const attractionModel = mongoose.model("attractions", attractionSchema);
 
 app.use(function (req, res, next) {
   // Website you wish to allow to connect
@@ -131,6 +133,30 @@ app.post("/add_apartment", (req, res) => {
       res.status("404").send(err.message);
     });
 });
+
+app.post("/add_attraction", (req, res) => {
+  const attractionData = req.body;
+  var attractionInstance = new attractionModel(attractionData);
+  return attractionInstance
+    .save()
+    .then((response) => {
+      res.send(response._id);
+    })
+    .catch((err) => {
+      res.status("404").send(err.message);
+    });
+});
+
+app.post("/delete_attraction", async (req, res) => {
+  const attractionData = req.body;
+  return apartmentModel
+    .deleteOne({ _id: attractionData.attractionID })
+    .then(() => {
+      res.send("Attraction Deletedd");
+    })
+    .catch((err) => res.status("404").send(err.message));
+});
+
 app.post("/order_apartment", (req, res) => {
   const data = req.body;
   var orderInstance = new orderModel(data);

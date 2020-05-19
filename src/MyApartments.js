@@ -89,7 +89,7 @@ const MyApartments = ({ type, userID }) => {
   };
 
   return (
-    <div>
+    <div className="ui conatiner">
       <NavBar
         OrderBy={orderApartments}
         myOrdersButton={createMyOrdersButton()}

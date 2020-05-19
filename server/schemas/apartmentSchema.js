@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+const apartmentAttractionSchema = require("./apartmentAttractionsSchema");
 let userSchema = new mongoose.Schema({
   owner: {
     type: mongoose.Types.ObjectId,
@@ -47,6 +47,10 @@ let userSchema = new mongoose.Schema({
   },
   raters: {
     type: Number,
+    required: true,
+  },
+  attractions: {
+    type: [apartmentAttractionSchema],
     required: true,
   },
 });

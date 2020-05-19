@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ImageUploader from "react-images-upload";
 import axios from "axios";
+import AttractionField from "./AttractionField";
 
 const ApartmentForm = ({ submitForm, apartmentData }) => {
   const [apartmentOwnerName, setApartmentOwnerName] = useState();
@@ -11,8 +12,13 @@ const ApartmentForm = ({ submitForm, apartmentData }) => {
   const [dateLimit, setDateLimit] = useState();
   const [apartmentDescription, setApartmentDescription] = useState();
   const [imgFile, setImgFile] = useState(null);
+  const [attractionFields, setAttractionFields] = useState([]);
 
-  const [submitButtonName, setSubmitButtonName] = useState("Add");
+  const [submitButtonName, setSubmitButtonName] = useState("Add Apartment");
+
+  useEffect(() => {
+    setAttractionFields([<AttractionField key={0} />]);
+  }, []);
 
   useEffect(() => {
     if (apartmentData !== undefined) {
@@ -40,13 +46,19 @@ const ApartmentForm = ({ submitForm, apartmentData }) => {
     var imageUrl = urlCreator.createObjectURL(imgFile);
     return imageUrl;
   };
+
+  const addAttraction = () => {
+    const newAttractionFields = [
+      ...attractionFields,
+      <AttractionField key={attractionFields.length + 1} />,
+    ];
+    setAttractionFields(newAttractionFields);
+  };
+
   const createForm = () => {
     return (
-      <div>
-        <form
-          className="ui form"
-          onSubmit={(event) => submitForm(event, imgFile)}
-        >
+      <div className="ui container segment">
+        <form className="ui form" onSubmit={submitForm}>
           <div className="field">
             <label>Name</label>
             <input
@@ -77,7 +89,6 @@ const ApartmentForm = ({ submitForm, apartmentData }) => {
               placeholder="Location"
             />
           </div>
-
           <div className="field">
             <label>Rooms</label>
             <input
@@ -129,14 +140,23 @@ const ApartmentForm = ({ submitForm, apartmentData }) => {
             ) : null}
 
             <ImageUploader
-              name="image"
+              name="apartment_image"
               withIcon={false}
-              buttonText="Choose images"
+              buttonText="Choose apartment image"
               onChange={onDrop}
               singleImage={true}
-              imgExtension={[".jpg"]}
+              imgExtension={[".jpg", ".gif", ".png"]}
               maxFileSize={5242880}
             />
+          </div>
+          <div className="ui segment">
+            <label>Attraction</label>
+
+            {attractionFields.map((field) => field)}
+            <div className="ui button" onClick={addAttraction}>
+              <i className="plus icon" />
+              Add Atraction
+            </div>
           </div>
           <button className="ui button" type="submit">
             {submitButtonName}

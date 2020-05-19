@@ -54,7 +54,7 @@ const Apartments = ({ userID, type }) => {
     );
   };
   return (
-    <div>
+    <div className="ui conatiner">
       <NavBar OrderBy={(sorter) => orderApartments(sorter)} />
       <div className="ui cards">
         {apartmentList.length === 0
