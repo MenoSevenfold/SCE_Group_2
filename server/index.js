@@ -107,7 +107,6 @@ app.post("/login_request", async (req, res) => {
 
 app.post("/apartment_update", async (req, res) => {
   const apartmentData = req.body;
-  console.log(apartmentData);
   return apartmentModel
     .findOne({ _id: apartmentData.apartmentID })
     .then(async (apartment) => {
@@ -147,14 +146,32 @@ app.post("/add_attraction", (req, res) => {
     });
 });
 
-app.post("/delete_attraction", async (req, res) => {
+app.post("/attraction_update", async (req, res) => {
   const attractionData = req.body;
-  return apartmentModel
-    .deleteOne({ _id: attractionData.attractionID })
-    .then(() => {
-      res.send("Attraction Deletedd");
+  return attractionModel
+    .findOne({ _id: attractionData.attractionID })
+    .then(async (attraction) => {
+      Object.assign(attraction, attractionData);
+      return attraction.save().then((result) => {
+        res.send(result._id);
+      });
     })
-    .catch((err) => res.status("404").send(err.message));
+    .catch((err) => {
+      res.status("503").send(err.message);
+    });
+});
+
+app.get("/get_attraction", async (req, res) => {
+  const attractionData = req.query;
+  const _id = attractionData.attractionID;
+  return attractionModel
+    .findOne({ _id })
+    .then(async (attraction) => {
+      res.send(attraction);
+    })
+    .catch((err) => {
+      res.status("404").send(err.message);
+    });
 });
 
 app.post("/order_apartment", (req, res) => {

@@ -58,9 +58,11 @@ const AddApartment = ({ match }) => {
 
           return { attractionID, discount };
         })
-        .catch((err) =>
-          alert("You must upload an image to attraction number " + (i + 1))
-        );
+        .catch((err) => {
+          throw Error(
+            "You must upload an image to attraction number " + (i + 1)
+          );
+        });
     });
     attractionList = await Promise.all(attractionList);
     return attractionList;

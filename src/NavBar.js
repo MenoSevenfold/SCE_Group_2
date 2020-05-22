@@ -23,6 +23,9 @@ const NavBar = ({ OrderBy, myOrdersButton }) => {
           <option key="rooms" value="rooms">
             Rooms
           </option>
+          <option key="rating" value="rating">
+            Rating
+          </option>
         </select>
         {myOrdersButton}
       </div>

@@ -23,6 +23,14 @@ const Apartments = ({ userID, type }) => {
       newList = [...apartmentList.sort((a, b) => (a.price > b.price ? 1 : -1))];
     } else if (sortyBy === "rooms") {
       newList = [...apartmentList.sort((a, b) => (a.rooms > b.rooms ? 1 : -1))];
+    } else if (sortyBy === "rating") {
+      newList = [
+        ...apartmentList.sort((a, b) => {
+          const aRating = a.rating / (a.raters === 0 ? 1 : a.raters + 1);
+          const bRating = b.rating / (b.raters === 0 ? 1 : b.raters + 1);
+          return aRating > bRating ? 1 : -1;
+        }),
+      ];
     }
     setApartmentList(newList);
   };

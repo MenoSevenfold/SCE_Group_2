@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import ImageUploader from "react-images-upload";
 import axios from "axios";
 import AttractionField from "./AttractionField";
+import { server } from "./api";
 
 const ApartmentForm = ({ submitForm, apartmentData }) => {
   const [apartmentOwnerName, setApartmentOwnerName] = useState();
@@ -17,10 +18,6 @@ const ApartmentForm = ({ submitForm, apartmentData }) => {
   const [submitButtonName, setSubmitButtonName] = useState("Add Apartment");
 
   useEffect(() => {
-    setAttractionFields([<AttractionField key={0} />]);
-  }, []);
-
-  useEffect(() => {
     if (apartmentData !== undefined) {
       setApartmentOwnerName(apartmentData.name);
       setApartmentPhone(apartmentData.phone);
@@ -29,23 +26,43 @@ const ApartmentForm = ({ submitForm, apartmentData }) => {
       setApartmentRooms(apartmentData.rooms);
       setApartmentDescription(apartmentData.info);
       setDateLimit(apartmentData.dateLimit);
+      const fetchAttractionsData = async () => {
+        let attractionFieldsList = apartmentData.attractions.map(
+          async (attraction, ind) => {
+            return await server
+              .get("/get_attraction", {
+                params: { attractionID: attraction.attractionID },
+              })
+              .then((res) => {
+                return (
+                  <AttractionField
+                    key={ind + 1}
+                    attractionData={{ ...res.data }}
+                  />
+                );
+              });
+          }
+        );
+        attractionFieldsList = await Promise.all(attractionFieldsList);
+        setAttractionFields(attractionFieldsList);
+      };
+
+      fetchAttractionsData();
       axios({
         url: apartmentData.picture,
         method: "GET",
         responseType: "blob",
-      }).then((res) => setImgFile(res.data));
+      }).then((res) => {
+        const blob = res.data;
+        var file = new File([blob], "imageuploaded");
+
+        setImgFile(file);
+      });
       setSubmitButtonName("Save");
+    } else {
+      setAttractionFields([<AttractionField key={0} />]);
     }
   }, [apartmentData]);
-
-  const onDrop = (picture) => {
-    setImgFile(picture[0]);
-  };
-  const getURL = (imgFile) => {
-    var urlCreator = window.URL || window.webkitURL;
-    var imageUrl = urlCreator.createObjectURL(imgFile);
-    return imageUrl;
-  };
 
   const addAttraction = () => {
     const newAttractionFields = [
@@ -53,6 +70,14 @@ const ApartmentForm = ({ submitForm, apartmentData }) => {
       <AttractionField key={attractionFields.length + 1} />,
     ];
     setAttractionFields(newAttractionFields);
+  };
+  const onDrop = (picture) => {
+    setImgFile(picture[0]);
+  };
+  const getURL = (imgFile) => {
+    var urlCreator = window.URL || window.webkitURL;
+    var imageUrl = urlCreator.createObjectURL(imgFile);
+    return imageUrl;
   };
 
   const createForm = () => {
@@ -132,9 +157,11 @@ const ApartmentForm = ({ submitForm, apartmentData }) => {
           <div className="field">
             {imgFile !== null ? (
               <img
+                name="test"
                 alt="Media Content"
                 height="200px"
                 width="200px"
+                value={imgFile}
                 src={typeof imgFile === "string" ? imgFile : getURL(imgFile)}
               ></img>
             ) : null}

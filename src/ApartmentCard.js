@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import { Rating } from "semantic-ui-react";
 import { server } from "./api";
+import AttractionsView from "./AttractionsView";
 
 const ApartmentCard = ({ apartment, button, currentUser }) => {
   const [currentRate, setCurrentRate] = useState(
     apartment.rating / (apartment.raters === 0 ? 1 : apartment.raters)
   );
+  const [modalIsOpen, setIsOpen] = React.useState(false);
+
   const rateApartment = (e, data) => {
-    console.log(data.rating);
     const rateData = {
       apartmentID: apartment._id,
       raters: apartment.raters + 1,
@@ -26,6 +28,25 @@ const ApartmentCard = ({ apartment, button, currentUser }) => {
         alert(error.request.responseText);
       });
   };
+
+  const customStyles = {
+    content: {
+      top: "50%",
+      left: "50%",
+      right: "auto",
+      bottom: "auto",
+      marginRight: "-50%",
+      transform: "translate(-50%, -50%)",
+    },
+  };
+
+  function openModal() {
+    setIsOpen(true);
+  }
+
+  function closeModal() {
+    setIsOpen(false);
+  }
   return (
     <div className="ui card">
       <div className="content">
@@ -96,8 +117,23 @@ const ApartmentCard = ({ apartment, button, currentUser }) => {
             />
           )}
         </div>
+        <div
+          className="header"
+          style={{ cursor: "pointer", color: "blue" }}
+          onClick={openModal}
+        >
+          <u>Attractions</u>
+        </div>
         {button}
       </div>
+      <AttractionsView
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        style={customStyles}
+        // receiverName={userProfile.username}
+        closeModal={closeModal}
+        attractionsList={apartment.attractions}
+      />
     </div>
   );
 };

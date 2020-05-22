@@ -1,18 +1,28 @@
 import React, { useState, useEffect } from "react";
 import ImageUploader from "react-images-upload";
+import axios from "axios";
 
-const AttractionField = ({ apartmentData }) => {
+const AttractionField = ({ attractionData }) => {
   const [attractionImgFile, setAttractionImgFile] = useState(null);
 
   const [attractionName, setAttractionName] = useState("");
   const [attractionPrice, setAttractionPrice] = useState();
-  const [attractionDiscount, setAttractionDiscount] = useState();
 
+  const [attractionDiscount, setAttractionDiscount] = useState();
+  const [attractionID, setAttractionID] = useState();
   useEffect(() => {
-    if (apartmentData !== undefined) {
-      console.log(apartmentData.attractions);
+    if (attractionData !== undefined) {
+      setAttractionName(attractionData.name);
+      setAttractionPrice(attractionData.price);
+      setAttractionDiscount(attractionData.price);
+      setAttractionID(attractionData._id);
+      axios({
+        url: attractionData.picture,
+        method: "GET",
+        responseType: "blob",
+      }).then((res) => setAttractionImgFile(res.data));
     }
-  }, [apartmentData]);
+  }, [attractionData]);
 
   const onDropImgAttraction = (picture) => {
     setAttractionImgFile(picture[0]);
@@ -25,7 +35,7 @@ const AttractionField = ({ apartmentData }) => {
   };
 
   return (
-    <div className="field attraction_fields">
+    <div className="field attraction_fields" attractionid={`${attractionID}`}>
       <input
         form="fakeForm"
         value={attractionName}
