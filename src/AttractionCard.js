@@ -1,26 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { server } from "./api";
+import React from "react";
 
-const AttractionCard = ({ attraction }) => {
-  const [attractionDetails, setAttractionDetails] = useState({});
-
-  useEffect(() => {
-    const fetch = async () => {
-      server
-        .get("/get_attraction", {
-          params: { attractionID: attraction.attractionID },
-        })
-        .then((res) => {
-          setAttractionDetails(res.data);
-        });
-    };
-    fetch();
-  }, [attraction]);
-
+const AttractionCard = ({ attractionDetails }) => {
   return (
     <div className="card" style={{ cursor: "inherit" }}>
       <div className="image">
-        <img alt="attraction" src={attractionDetails.picture} />
+        <img
+          alt="attraction"
+          src={attractionDetails.picture}
+          height="200px"
+          width="200px"
+        />
       </div>
       <div className="content">
         <div className="header">{attractionDetails.name}</div>
@@ -30,9 +19,9 @@ const AttractionCard = ({ attraction }) => {
           </div>
           <div style={{ color: "green" }}>
             <b>
-              After {attraction.discount}% Discount:{" "}
+              After {attractionDetails.discount}% Discount:{" "}
               {attractionDetails.price -
-                attractionDetails.price * (attraction.discount / 100)}
+                attractionDetails.price * (attractionDetails.discount / 100)}
               (ILS)
             </b>
           </div>

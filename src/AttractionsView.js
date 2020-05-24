@@ -1,9 +1,30 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
+import { server } from "./api";
 import AttractionCard from "./AttractionCard";
 
-const AttractionsView = ({ attractionsList, ...props }) => {
+const AttractionsView = ({ apartmentAttractionsList, ...props }) => {
   Modal.setAppElement("#root");
+  const [attractionsList, setAttractionsList] = useState([]);
+
+  useEffect(() => {
+    const fetch = async () => {
+      let newAttractionsList = apartmentAttractionsList.map(
+        async (attraction) => {
+          return server
+            .get("/get_attraction", {
+              params: { attractionID: attraction.attractionID },
+            })
+            .then((res) => {
+              return { ...res.data, discount: attraction.discount };
+            });
+        }
+      );
+      newAttractionsList = await Promise.all(newAttractionsList);
+      setAttractionsList([...newAttractionsList]);
+    };
+    fetch();
+  }, [apartmentAttractionsList]);
 
   return (
     <Modal {...props}>
@@ -13,7 +34,9 @@ const AttractionsView = ({ attractionsList, ...props }) => {
         </div>
         <div className="ui link cards">
           {attractionsList.map((attraction, index) => {
-            return <AttractionCard key={index} attraction={attraction} />;
+            return (
+              <AttractionCard key={index} attractionDetails={attraction} />
+            );
           })}
         </div>
         <div></div>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import ImageUploader from "react-images-upload";
 import axios from "axios";
 
-const AttractionField = ({ attractionData }) => {
+const AttractionField = ({ discount, attractionData }) => {
   const [attractionImgFile, setAttractionImgFile] = useState(null);
 
   const [attractionName, setAttractionName] = useState("");
@@ -14,7 +14,7 @@ const AttractionField = ({ attractionData }) => {
     if (attractionData !== undefined) {
       setAttractionName(attractionData.name);
       setAttractionPrice(attractionData.price);
-      setAttractionDiscount(attractionData.price);
+      setAttractionDiscount(attractionData.discount);
       setAttractionID(attractionData._id);
       axios({
         url: attractionData.picture,

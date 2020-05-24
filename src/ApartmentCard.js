@@ -18,8 +18,6 @@ const ApartmentCard = ({ apartment, button, currentUser }) => {
     server
       .post("/apartment_update", rateData)
       .then(function (response) {
-        console.log(response);
-
         setCurrentRate(
           rateData.rating / (apartment.raters === 0 ? 1 : apartment.raters + 1)
         );
@@ -132,7 +130,7 @@ const ApartmentCard = ({ apartment, button, currentUser }) => {
         style={customStyles}
         // receiverName={userProfile.username}
         closeModal={closeModal}
-        attractionsList={apartment.attractions}
+        apartmentAttractionsList={apartment.attractions}
       />
     </div>
   );

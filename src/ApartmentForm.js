@@ -37,7 +37,10 @@ const ApartmentForm = ({ submitForm, apartmentData }) => {
                 return (
                   <AttractionField
                     key={ind + 1}
-                    attractionData={{ ...res.data }}
+                    attractionData={{
+                      ...res.data,
+                      discount: attraction.discount,
+                    }}
                   />
                 );
               });
