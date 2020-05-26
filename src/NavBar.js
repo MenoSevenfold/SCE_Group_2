@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const NavBar = ({ OrderBy, myOrdersButton }) => {
   return (
@@ -28,6 +29,7 @@ const NavBar = ({ OrderBy, myOrdersButton }) => {
           </option>
         </select>
         {myOrdersButton}
+        <Link to={{ pathname: `/` }}>Logout</Link>
       </div>
     </div>
   );
