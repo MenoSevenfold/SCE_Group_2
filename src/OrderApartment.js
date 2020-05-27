@@ -62,9 +62,8 @@ const OrderApartment = ({ match }) => {
     delete formData["name"];
     formData.apartmentOwner = apartment.owner;
     formData.apartmentID = match.params.apartmentID;
-    formData.price = apartment.price;
     formData.renterID = match.params.userID;
-    formData.apartmentOwnerName = apartment.name;
+    formData.purchaseDate = new Date();
     if (
       differenceInCalendarDays(
         new Date(formData.toDate),

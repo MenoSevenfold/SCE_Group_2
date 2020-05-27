@@ -1,10 +1,72 @@
 import React, { useEffect, useState } from "react";
 import { server } from "./api";
 import { Link } from "react-router-dom";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+} from "recharts";
+import { createChartDefaultDataByDate, getMonthsNames } from "./utilities";
 import OrderCard from "./OrderCard";
+import { differenceInCalendarDays } from "date-fns";
 
 const OrderTracker = ({ match }) => {
   const [orderList, setOrderList] = useState([]);
+
+  const calcPrice = (order) => {
+    const priceForDay = order.price / 30;
+    const days = differenceInCalendarDays(
+      new Date(order.toDate),
+      new Date(order.fromDate)
+    );
+    return priceForDay * days;
+  };
+  const creatChartApartmentsDataByMonths = (orderList) => {
+    const dataList = createChartDefaultDataByDate();
+    orderList.forEach((order) => {
+      const orderDataIndex = dataList.findIndex(
+        (data) =>
+          data.name ===
+          getMonthsNames()[new Date(order.purchaseDate).getMonth()]
+      );
+      dataList[orderDataIndex].sales += calcPrice(order);
+    });
+    return dataList;
+  };
+
+  const createChartApartmentsDataByLocation = (orderList) => {
+    const dataList = [];
+    orderList.forEach((order) => {
+      const orderDataIndex = dataList.findIndex(
+        (data) => data.name === order.location
+      );
+      if (orderDataIndex === -1) {
+        dataList.push({ name: order.location, sales: calcPrice(order) });
+      } else {
+        dataList[orderDataIndex].sales += calcPrice(order);
+      }
+    });
+    return dataList;
+  };
+  const createChartApartmentsDataByApartmentType = (orderList) => {
+    const dataList = [];
+    orderList.forEach((order) => {
+      const orderDataIndex = dataList.findIndex(
+        (data) => data.name === order.type
+      );
+      if (orderDataIndex === -1) {
+        dataList.push({ name: order.type, sales: calcPrice(order) });
+      } else {
+        dataList[orderDataIndex].sales += calcPrice(order);
+      }
+    });
+    return dataList;
+  };
+
   useEffect(() => {
     const fetch = async () => {
       server
@@ -13,16 +75,25 @@ const OrderTracker = ({ match }) => {
             userID: match.params.userID,
           },
         })
-        .then((res) => {
-          setOrderList(res.data);
+        .then(async (res) => {
+          const returnedOrderList = res.data;
+          let newOrderList = returnedOrderList.map(async (order) => {
+            return server
+              .get("/get_apartment", {
+                params: { apartmentID: order.apartmentID },
+              })
+              .then((apartmentRes) => {
+                return { ...order, ...apartmentRes.data };
+              });
+          });
+          newOrderList = await Promise.all(newOrderList);
+          setOrderList(newOrderList);
         });
     };
     fetch();
   }, [match]);
 
   const createApartmentCard = (order, ind) => {
-    console.log(match.params.type, match.params.userID);
-
     return <OrderCard key={ind} order={order} />;
   };
   const emptyApartment = () => {
@@ -44,6 +115,96 @@ const OrderTracker = ({ match }) => {
           : orderList.map((order, ind) => {
               return createApartmentCard(order, ind);
             })}
+      </div>
+      <div
+        style={{
+          width: "400px",
+          height: "300px",
+        }}
+      >
+        <BarChart
+          width={500}
+          height={300}
+          data={creatChartApartmentsDataByMonths(orderList)}
+          margin={{
+            top: 5,
+            right: 30,
+            left: 20,
+            bottom: 5,
+          }}
+          barSize={20}
+        >
+          <XAxis
+            dataKey="name"
+            scale="point"
+            padding={{ left: 10, right: 10 }}
+          />
+          <YAxis />
+          <Tooltip />
+          <Legend />
+          <CartesianGrid strokeDasharray="3 3" />
+          <Bar dataKey="sales" fill="#8884d8" background={{ fill: "#eee" }} />
+        </BarChart>
+      </div>
+      <div
+        style={{
+          width: "400px",
+          height: "300px",
+        }}
+      >
+        <BarChart
+          width={500}
+          height={300}
+          data={createChartApartmentsDataByLocation(orderList)}
+          margin={{
+            top: 5,
+            right: 30,
+            left: 20,
+            bottom: 5,
+          }}
+          barSize={20}
+        >
+          <XAxis
+            dataKey="name"
+            scale="point"
+            padding={{ left: 10, right: 10 }}
+          />
+          <YAxis />
+          <Tooltip />
+          <Legend />
+          <CartesianGrid strokeDasharray="3 3" />
+          <Bar dataKey="sales" fill="#8884d8" background={{ fill: "#eee" }} />
+        </BarChart>
+      </div>
+      <div
+        style={{
+          width: "400px",
+          height: "300px",
+        }}
+      >
+        <BarChart
+          width={500}
+          height={300}
+          data={createChartApartmentsDataByApartmentType(orderList)}
+          margin={{
+            top: 5,
+            right: 30,
+            left: 20,
+            bottom: 5,
+          }}
+          barSize={20}
+        >
+          <XAxis
+            dataKey="name"
+            scale="point"
+            padding={{ left: 10, right: 10 }}
+          />
+          <YAxis />
+          <Tooltip />
+          <Legend />
+          <CartesianGrid strokeDasharray="3 3" />
+          <Bar dataKey="sales" fill="#8884d8" background={{ fill: "#eee" }} />
+        </BarChart>
       </div>
       <div className="ui bottom attached button">
         <Link

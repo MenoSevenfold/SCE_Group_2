@@ -65,6 +65,10 @@ const ApartmentCard = ({ apartment, button, currentUser }) => {
           {apartment.rooms}
         </div>
         <div className="header">
+          <label>Apartment type: </label>
+          {apartment.type}
+        </div>
+        <div className="header">
           <label>Date Limit: </label>
           {apartment.dateLimit} Days
         </div>

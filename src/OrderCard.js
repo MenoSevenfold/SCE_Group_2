@@ -4,7 +4,7 @@ import { differenceInCalendarDays } from "date-fns";
 const OrderCard = ({ order, button }) => {
   const fromDate = new Date(order.fromDate);
   const toDate = new Date(order.toDate);
-
+  const purchaseDate = new Date(order.purchaseDate);
   const calcPrice = () => {
     const priceForDay = order.price / 30;
     const days = differenceInCalendarDays(new Date(toDate), new Date(fromDate));
@@ -22,9 +22,22 @@ const OrderCard = ({ order, button }) => {
           <label>Rented by: </label>
           {order.renterName}
         </div>
+
         <div className="header">
-          <label>Paying: </label>
-          {order.price}
+          <label>Apartment Location: </label>
+          {order.location}
+        </div>
+        <div className="header">
+          <label>Purchase date: </label>
+          {purchaseDate.getDate() +
+            "/" +
+            (purchaseDate.getMonth() + 1) +
+            "/" +
+            purchaseDate.getFullYear()}
+        </div>
+        <div className="header">
+          <label>Apartment Type: </label>
+          {order.type}
         </div>
         <div className="header">
           <label>From: </label>
@@ -43,7 +56,11 @@ const OrderCard = ({ order, button }) => {
             toDate.getFullYear()}
         </div>
         <div className="header">
-          <label>Actual Paying: </label>
+          <label>Price: </label>
+          {order.price}
+        </div>
+        <div className="header">
+          <label>Actual Related Paying: </label>
           {calcPrice().toFixed(2)}
         </div>
         {button}

@@ -9,16 +9,8 @@ let oderSchema = new mongoose.Schema({
     type: mongoose.Types.ObjectId,
     required: true,
   },
-  apartmentOwnerName: {
-    type: String,
-    required: true,
-  },
   renterName: {
     type: String,
-    required: true,
-  },
-  price: {
-    type: Number,
     required: true,
   },
   credit: {
@@ -34,6 +26,10 @@ let oderSchema = new mongoose.Schema({
     required: true,
   },
   toDate: {
+    type: Date,
+    required: true,
+  },
+  purchaseDate: {
     type: Date,
     required: true,
   },

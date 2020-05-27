@@ -14,7 +14,7 @@ const ApartmentForm = ({ submitForm, apartmentData }) => {
   const [apartmentDescription, setApartmentDescription] = useState();
   const [imgFile, setImgFile] = useState(null);
   const [attractionFields, setAttractionFields] = useState([]);
-
+  const [apartmentType, setApartmentType] = useState();
   const [submitButtonName, setSubmitButtonName] = useState("Add Apartment");
 
   useEffect(() => {
@@ -26,6 +26,7 @@ const ApartmentForm = ({ submitForm, apartmentData }) => {
       setApartmentRooms(apartmentData.rooms);
       setApartmentDescription(apartmentData.info);
       setDateLimit(apartmentData.dateLimit);
+      setApartmentType(apartmentData.type);
       const fetchAttractionsData = async () => {
         let attractionFieldsList = apartmentData.attractions.map(
           async (attraction, ind) => {
@@ -158,6 +159,18 @@ const ApartmentForm = ({ submitForm, apartmentData }) => {
             ></textarea>
           </div>
           <div className="field">
+            <label>Type:</label>
+            <select
+              name="type"
+              value={apartmentType}
+              onChange={(event) => setApartmentType(event.target.value)}
+            >
+              <option value={"basement"}>basement</option>
+              <option value={"Building"}>Building</option>
+              <option value={"Ground house"}>Ground house</option>
+            </select>
+          </div>
+          <div className="field">
             {imgFile !== null ? (
               <img
                 name="test"
@@ -179,6 +192,7 @@ const ApartmentForm = ({ submitForm, apartmentData }) => {
               maxFileSize={5242880}
             />
           </div>
+
           <div className="ui segment">
             <label>Attraction</label>
 

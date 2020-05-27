@@ -53,6 +53,10 @@ let userSchema = new mongoose.Schema({
     type: [apartmentAttractionSchema],
     required: true,
   },
+  type: {
+    type: String,
+    required: true,
+  },
 });
 
 module.exports = userSchema;
