@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import ImageUploader from "react-images-upload";
-import axios from "axios";
-import AttractionField from "./AttractionField";
-import { server } from "./api";
+import ImageUploader                  from "react-images-upload";
+import axios                          from "axios";
+import AttractionField                from "./AttractionField";
+import { server }                     from "./api";
+import { getURL }                     from 'src/utilities'
 
 const ApartmentForm = ({ submitForm, apartmentData }) => {
   const [apartmentOwnerName, setApartmentOwnerName] = useState();
@@ -77,11 +78,6 @@ const ApartmentForm = ({ submitForm, apartmentData }) => {
   };
   const onDrop = (picture) => {
     setImgFile(picture[0]);
-  };
-  const getURL = (imgFile) => {
-    var urlCreator = window.URL || window.webkitURL;
-    var imageUrl = urlCreator.createObjectURL(imgFile);
-    return imageUrl;
   };
 
   const createForm = () => {

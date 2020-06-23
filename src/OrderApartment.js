@@ -5,8 +5,9 @@ import ApartmentCard from "./ApartmentCard";
 import { differenceInCalendarDays } from "date-fns";
 import "react-datepicker/dist/react-datepicker.css";
 
-import DatePicker from "react-datepicker";
-import AttractionOrderCard from "./AttractionOrderCard";
+import DatePicker               from "react-datepicker";
+import AttractionOrderCard      from "./AttractionOrderCard";
+import { createDictionaryForm } from 'src/utilities'
 
 const OrderApartment = ({ match }) => {
   let history = useHistory();
@@ -46,15 +47,6 @@ const OrderApartment = ({ match }) => {
     fetch();
   }, [apartment]);
 
-  const createDictionaryForm = ({ target }) => {
-    let details = {};
-    for (let i = 0; target[i].type !== "submit"; i++) {
-      let name = target[i].name;
-      let value = target[i].value;
-      details[name] = value;
-    }
-    return details;
-  };
   const makeAnOrder = (event) => {
     event.preventDefault();
     let formData = createDictionaryForm(event);

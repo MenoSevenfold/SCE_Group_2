@@ -1,23 +1,15 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
-import { server } from "./api";
-import ImageUploader from "react-images-upload";
-import axios from "axios";
+import { useHistory }      from "react-router-dom";
+import { server }          from "./api";
+import ImageUploader       from "react-images-upload";
+import axios                            from "axios";
+import { createDictionaryForm, getURL } from 'src/utilities'
 
 const Register = () => {
   const [userType, setUserType] = useState("tenant");
   const [imgFile, setImgFile] = useState(null);
 
   const history = useHistory();
-  const createDictionaryForm = ({ target }) => {
-    let details = {};
-    for (let i = 0; target[i].type !== "submit"; i++) {
-      let name = target[i].name;
-      let value = target[i].value;
-      details[name] = value;
-    }
-    return details;
-  };
 
   const submitForm = async (event) => {
     event.preventDefault();
@@ -50,11 +42,7 @@ const Register = () => {
   const onDrop = (picture) => {
     setImgFile(picture[0]);
   };
-  const getURL = (imgFile) => {
-    var urlCreator = window.URL || window.webkitURL;
-    var imageUrl = urlCreator.createObjectURL(imgFile);
-    return imageUrl;
-  };
+
   return (
     <div className="ui container segment">
       <form className="ui form" onSubmit={submitForm}>

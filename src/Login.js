@@ -1,18 +1,10 @@
-import React from "react";
-import { Link, useHistory } from "react-router-dom";
-import { server } from "./api";
+import React                    from "react";
+import { Link, useHistory }     from "react-router-dom";
+import { server }               from "./api";
+import { createDictionaryForm } from 'src/utilities'
 
 const Login = () => {
   const history = useHistory();
-  const createDictionaryForm = ({ target }) => {
-    let details = {};
-    for (let i = 0; target[i].type !== "submit"; i++) {
-      let name = target[i].name;
-      let value = target[i].value;
-      details[name] = value;
-    }
-    return details;
-  };
 
   const submitForm = async (event) => {
     event.preventDefault();

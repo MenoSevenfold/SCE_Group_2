@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import ImageUploader from "react-images-upload";
-import axios from "axios";
+import ImageUploader                  from "react-images-upload";
+import axios                          from "axios";
+import { getURL }                     from 'src/utilities'
 
 const AttractionField = ({ discount, attractionData }) => {
   const [attractionImgFile, setAttractionImgFile] = useState(null);
@@ -26,12 +27,6 @@ const AttractionField = ({ discount, attractionData }) => {
 
   const onDropImgAttraction = (picture) => {
     setAttractionImgFile(picture[0]);
-  };
-
-  const getURL = (imgFile) => {
-    var urlCreator = window.URL || window.webkitURL;
-    var imageUrl = urlCreator.createObjectURL(imgFile);
-    return imageUrl;
   };
 
   return (
